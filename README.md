@@ -1,2 +1,3 @@
 # Bus-ticket-booking-system
-nnnn
+A web-based reservation system using Flask and MySQL with authentication, seat booking, and 
+real-time booking updates. 
