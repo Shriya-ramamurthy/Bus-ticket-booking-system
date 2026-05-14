@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Bus</title>
+</head>
+<body>
+    <h2>Book Bus - {{ bus['name'] }}</h2>
+    <form method="POST">
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+        <label>Number of Seats:</label>
+        <input type="number" name="seats" min="1" required><br>
+        <input type="submit" value="Book">
+    </form>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Buses</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        function addPassengerFields(formId, maxSeats) {
+            let form = document.getElementById(formId);
+            let numSeats = form.querySelector('input[name="num_seats"]').value;
+            let passengerFields = form.querySelector('.passenger-fields');
+            
+            passengerFields.innerHTML = ""; // Clear previous inputs
+            
+            if (numSeats > 0 && numSeats <= maxSeats) {
+                for (let i = 1; i <= numSeats; i++) {
+                    passengerFields.innerHTML += `
+                        <div>
+                            <label>Passenger ${i} Name:</label>
+                            <input type="text" name="passenger_name_${i}" required>
+                            <label>Age:</label>
+                            <input type="number" name="passenger_age_${i}" min="1" required>
+                        </div><br>
+                    `;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h2>Available Buses</h2>
+    <table>
+        <tr>
+            <th>Bus Name</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Available Seats</th>
+            <th>Departure Time</th>
+            <th>Price</th>
+            <th>Book</th>
+        </tr>
+        {% for bus in buses %}
+        <tr>
+            <td>{{ bus['name'] }}</td>
+            <td>{{ bus['source'] }}</td>
+            <td>{{ bus['destination'] }}</td>
+            <td>{{ bus['available_seats'] }}</td>
+            <td>{{ bus['departure_time'] }}</td>
+            <td>₹{{ bus['price'] }}</td>
+            <td>
+                <form id="form_{{ bus['id'] }}" method="POST" action="{{ url_for('book', bus_id=bus['id']) }}">
+                    <label>Number of Seats:</label>
+                    <input type="number" name="num_seats" min="1" max="{{ bus['available_seats'] }}" required 
+                           oninput="addPassengerFields('form_{{ bus['id'] }}', {{ bus['available_seats'] }})">
+                    <div class="passenger-fields"></div>
+                    <button type="submit">Book</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <form action="{{ url_for('logout') }}" method="GET">
+        <button type="submit">Logout</button>
+    </form>
+
+</body>
+</html>
